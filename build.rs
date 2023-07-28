@@ -152,7 +152,7 @@ mod c {
         //
         // Therefore, evaluate if those flags are present and set a boolean that causes any
         // compiler-rt intrinsics that contain floating point source to be excluded for this target.
-        if target_arch == "aarch64" {
+        if target_arch == "aarch64" || target_arch == "morello+c64" {
             let cflags_key = String::from("CFLAGS_") + &(target.to_owned().replace("-", "_"));
             if let Ok(cflags_value) = env::var(cflags_key) {
                 if cflags_value.contains("+nofp") || cflags_value.contains("+nosimd") {
@@ -408,7 +408,7 @@ mod c {
             ]);
         }
 
-        if target_arch == "aarch64" && consider_float_intrinsics {
+        if (target_arch == "aarch64" || target_arch == "morello+c64") && consider_float_intrinsics {
             sources.extend(&[
                 ("__comparetf2", "comparetf2.c"),
                 ("__extenddftf2", "extenddftf2.c"),
